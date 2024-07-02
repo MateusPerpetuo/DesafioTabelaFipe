@@ -1,5 +1,7 @@
 package be.com.alura.TabelaFipe.main;
 
+
+import be.com.alura.TabelaFipe.model.CarModels;
 import be.com.alura.TabelaFipe.model.Data;
 import be.com.alura.TabelaFipe.service.ApiConsumer;
 import be.com.alura.TabelaFipe.service.ConvertData;
@@ -21,18 +23,18 @@ public class Main {
         option = scan.nextLine();
         String adress;
 
-        while (true) {
+        while (true) { // checking the user input
             if (option.toLowerCase().contains("car")) {
                 adress = BASE_URL + "carros/marcas";
-                option = " Carros";
+                option = "Carros";
                 break;
             } else if (option.toLowerCase().contains("mot")) {
                 adress = BASE_URL + "motos/marcas";
-                option = " Motos";
+                option = "Motos";
                 break;
             } else if (option.toLowerCase().contains("camin")) {
                 adress = BASE_URL + "caminhoes/marcas";
-                option = " Caminhões";
+                option = "Caminhões";
                 break;
             } else {
                 System.out.println("""
@@ -48,27 +50,32 @@ public class Main {
             }
             option = scan.nextLine();
         }
-        // checking the user input
 
-
-        // getting the api return and convertin the json to a list of a class
+        // getting the api return and converting the json to a list of a class
         var json = apiConsumer.getData(adress);
         var marcas = convertData.getList(json, Data.class);
 
-
         // show the list of the vehicles models
-        System.out.println(menuVehicleModels);
+        System.out.println("\n--- Lista das marcas de " + option +" ---\n");
 
         marcas.stream()
                 .sorted(Comparator.comparing(data -> Integer.parseInt(data.getCodigo())))
                 .forEach(System.out::println);
 
+        // askin to the api about car models
+        System.out.println("\nDigite o código da marca do veículo a ser consultado: ");
+        String carBrandCod = scan.nextLine();
+        adress = adress + "/" + carBrandCod + "/modelos";
 
-        System.out.println("Digite o código da marca do veículo a ser consultado: ");
+        // getting the api return and converting the json to a list of car models
+        json = apiConsumer.getData(adress);
+        var carModelsList =  convertData.getData(json, CarModels.class);
 
-        int carBrandCod = scan.nextInt();
-        scan.nextLine();
+        System.out.println("\n--- Lista dos CarModels dessa Marca ---\n");
 
+        carModelsList.modelos().stream()
+                .sorted(Comparator.comparing(data -> Integer.parseInt(data.getCodigo())))
+                .forEach(System.out::println);
 
 
 
@@ -92,9 +99,4 @@ public class Main {
                 Digite uma das opçõe para consultar:\s
                \s""";
 
-    private final String menuVehicleModels = String.format("""
-                
-                --- Lista das marcas de %n ---
-
-                """, option);
 }
