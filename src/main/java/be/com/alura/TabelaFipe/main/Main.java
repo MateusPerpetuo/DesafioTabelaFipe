@@ -94,7 +94,7 @@ public class Main {
         modelsFilter.forEach(System.out::println);
 
         // askin to the api about car models
-        System.out.println("Por favor digite o código do modelo para buscar os valores de avaliaçao: ");
+        System.out.println("\nPor favor digite o código do modelo para buscar os valores de avaliaçao: ");
         vehicleCode = scan.nextLine();
 
         // getting the api return and converting the json to a list cars years

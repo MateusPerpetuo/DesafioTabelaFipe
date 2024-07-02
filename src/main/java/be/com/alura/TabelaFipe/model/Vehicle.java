@@ -19,6 +19,6 @@ public record Vehicle(
                 + ", MARCA - " + brand
                 + ", ANO -" + year
                 + ", COMBUSTIVEL - " + fuelType
-                + "\nValor avaliado: R$" + Price;
+                + "\nValor avaliado: " + Price;
     }
 }
